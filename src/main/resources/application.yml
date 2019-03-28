@@ -1,0 +1,28 @@
+#server
+server:
+  port: 8080
+  tomcat:
+    uri-encoding: utf-8
+
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+  #MySQL
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/shopping?characterEncoding=UTF-8
+    username: ipms
+    password: 12345678
+  #Spring Data JPA
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      # Naming strategy
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+      # stripped before adding them to the entity manager)
+      dialect: org.hibernate.dialect.MySQL5Dialect
+
