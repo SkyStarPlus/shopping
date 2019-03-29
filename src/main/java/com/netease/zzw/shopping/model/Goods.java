@@ -16,21 +16,11 @@ public class Goods implements Serializable {
     private BigDecimal price;
     private String summary;
     private String description;
-    private String graph;
+    private String graphName;
+    private String graphSource;
+    private String graphLink;
     private Date createTime;
     private Date updateTime;
-
-    public Goods() {
-    }
-
-    public Goods(String name, BigDecimal price, String description, String graph) {
-        this.name = name;
-        this.price = price;
-        this.description = description;
-        this.graph = graph;
-        this.createTime = new Date();
-        this.updateTime = new Date();
-    }
 
     public long getId() {
         return id;
@@ -72,12 +62,28 @@ public class Goods implements Serializable {
         this.description = description;
     }
 
-    public String getGraph() {
-        return graph;
+    public String getGraphName() {
+        return graphName;
     }
 
-    public void setGraph(String graph) {
-        this.graph = graph;
+    public void setGraphName(String graphName) {
+        this.graphName = graphName;
+    }
+
+    public String getGraphSource() {
+        return graphSource;
+    }
+
+    public void setGraphSource(String graphSource) {
+        this.graphSource = graphSource;
+    }
+
+    public String getGraphLink() {
+        return graphLink;
+    }
+
+    public void setGraphLink(String graphLink) {
+        this.graphLink = graphLink;
     }
 
     public Date getCreateTime() {

@@ -29,49 +29,23 @@
     </div>
     <div class="n-plist">
         <ul class="f-cb" id="plist">
-
-    <c:forEach items="${goodsList}" var="goods" varStatus="status">
-    </c:forEach>
+            <c:forEach items="${goodsList}" var="goods" varStatus="status">
+                <li id="p-${goods.id}">
+                    <a href="/goods/show?id=${goods.id}" class="link">
+                        <div class="img"><img src="${goods.graphLink}" alt="${goods.graphName}"></div>
+                        <h3>${goods.summary}</h3>
+                        <div class="price"><span class="v-unit">¥</span><span class="v-value">${goods.price}</span></div>
+                    </a>
+                    <span class="u-btn u-btn-normal u-btn-xs del" data-del="262">删除</span>
+                </li>
+            </c:forEach>
 
             <li id="p-1">
                 <a href="/show?id=1" class="link">
                     <div class="img"><img src="https://gss2.bdstatic.com/-fo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike150%2C5%2C5%2C150%2C50/sign=78123d3cc21b9d169eca923392b7dfea/a71ea8d3fd1f413499deaa9d291f95cad0c85e63.jpg" alt="SICPP"></div>
                     <h3>SICPP</h3>
                     <div class="price"><span class="v-unit">¥</span><span class="v-value">-234.11</span></div>
-
-
                 </a>
-
-            </li>
-            <li id="p-2">
-                <a href="/show?id=2" class="link">
-                    <div class="img"><img src="啊的" alt="测试1123"></div>
-                    <h3>测试1123</h3>
-                    <div class="price"><span class="v-unit">¥</span><span class="v-value">10123</span></div>
-
-
-                </a>
-
-            </li>
-            <li id="p-3">
-                <a href="/show?id=3" class="link">
-                    <div class="img"><img src="xx" alt="权健保健品123"></div>
-                    <h3>权健保健品123</h3>
-                    <div class="price"><span class="v-unit">¥</span><span class="v-value">1008</span></div>
-
-
-                </a>
-
-            </li>
-            <li id="p-4">
-                <a href="/show?id=4" class="link">
-                    <div class="img"><img src="123" alt="aabb"></div>
-                    <h3>aabb</h3>
-                    <div class="price"><span class="v-unit">¥</span><span class="v-value">13</span></div>
-
-
-                </a>
-
             </li>
 
         </ul>
@@ -79,7 +53,7 @@
 </div>
 <div class="n-foot">
     <p>前端页面参考自原Demo项目</p>
-</div><script type="text/javascript" src="../../../resources/js/global.js"></script>
-<script type="text/javascript" src="../../../resources/js/public.js"></script>
+</div><script type="text/javascript" src="../../resources/js/global.js"></script>
+<script type="text/javascript" src="../../resources/js/pageIndex.js"></script>
 </body>
 </html>

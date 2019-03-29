@@ -14,12 +14,18 @@ public class GoodsServiceImpl implements GoodsService {
     private GoodsDao goodsDao;
 
     @Override
-    public void addGoods(String name, BigDecimal price, String summary, String description, String graph) {
-        goodsDao.addGoods(name, price, summary, description, graph);
+    public void addGoods(String name, BigDecimal price, String summary, String description,
+                         String graphName, String graphSource, String graphLink) {
+        goodsDao.addGoods(name, price, summary, description, graphName, graphSource, graphLink);
     }
 
     @Override
     public List<Goods> getAllGoods() {
         return goodsDao.findAll();
+    }
+
+    @Override
+    public Goods getGoodsById(long id) {
+        return goodsDao.findById(id);
     }
 }

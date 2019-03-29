@@ -6,7 +6,10 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface GoodsService {
-    void addGoods(String name, BigDecimal price, String summary, String description, String graph);
+    void addGoods(String name, BigDecimal price, String summary, String description,
+                  String graphName, String graphSource, String graphLink);
 
     List<Goods> getAllGoods();
+
+    Goods getGoodsById(long id);
 }

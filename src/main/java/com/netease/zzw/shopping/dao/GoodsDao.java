@@ -17,18 +17,27 @@ public interface GoodsDao extends JpaRepository<Goods, Long>  {
     /*
      * 添加商品
      * */
-    @Query(value = "insert into Goods (name, price, summary, description, graph) values (?, ?, ?, ?, ?)", nativeQuery = true)
+    @Query(value = "insert into Goods (name, price, summary, description, graph_name, graph_source, graph_link) values (?, ?, ?, ?, ?, ?, ?)",
+            nativeQuery = true)
     @Transactional
     @Modifying
     void addGoods(@Param("name") String name,
                   @Param("price") BigDecimal price,
                   @Param("summary") String summary,
                   @Param("description") String description,
-                  @Param("graph") String graph);
+                  @Param("graphName") String graphName,
+                  @Param("graphSource") String graphSource,
+                  @Param("graphLink") String graphLink);
 
     /*
      * 查询全部商品
      * */
     @Query("select t from Goods t")
     List<Goods> findAll();
+
+    /*
+     * 根据商品id查询
+     * */
+    @Query("select t from Goods t where t.id = :id")
+    Goods findById(@Param("id") long id);
 }

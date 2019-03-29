@@ -40,6 +40,12 @@ public class GoodsController {
         return "/index";
     }
 
+    @RequestMapping(value = "/goods/show", method = RequestMethod.GET)
+    public String showGoods(@RequestParam(value = "id") long id, Model model) {
+        Goods goods = goodsService.getGoodsById(id);
+        model.addAttribute("goods", goods);
+        return "/goods/show";
+    }
 
     @RequestMapping(value = "/goods/public", method = RequestMethod.GET)
     public String publicGoods() {
@@ -49,11 +55,25 @@ public class GoodsController {
     @RequestMapping(value = "/goods/publicSubmit", method = RequestMethod.POST)
     public String toPublicGoods(@RequestParam(value = "title") String name,
                                 @RequestParam(value = "summary") String summary,
-                                @RequestParam(value = "image") String graph,
+                                @RequestParam(value = "pic") String graphSource,
+                                @RequestParam(value = "image") String graphLink,
+                                @RequestParam(value = "file") String fileName,
                                 @RequestParam(value = "detail") String description,
                                 @RequestParam(value = "price") BigDecimal price) {
         //TODO 校验
-        goodsService.addGoods(name, price, summary, description, graph);
+        String graphName = "null";
+        if (fileName == null || fileName.isEmpty()) {
+            String[] filePathAndName = graphLink.split("/");
+            graphName = filePathAndName[filePathAndName.length - 1];
+        } else {
+            graphName = fileName;
+        }
+
+        // 验证价格是否小于0
+        if(price.compareTo(new BigDecimal(0)) < 0) {
+            return "/goods/public";
+        }
+        goodsService.addGoods(name, price, summary, description, graphName, graphSource, graphLink);
         return "/index";
     }
 
