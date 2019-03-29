@@ -1,5 +1,10 @@
 package com.netease.zzw.shopping.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.netease.zzw.shopping.config.GoodsConst;
+import com.netease.zzw.shopping.model.Goods;
+import com.netease.zzw.shopping.service.GoodsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,17 +16,30 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
 public class GoodsController {
 
+    @Autowired
+    private GoodsService goodsService;
+
     private String imageSavePath = getImageSavePath();
     private String delimiter = "_shoppingProjectImage_";
 
     private String getImageSavePath() {
-        return new File("image").getAbsolutePath();
+
+        return new File("images").getAbsolutePath();
     }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String displayIndexGoods(Model model) {
+        List<Goods> goodsList = goodsService.getAllGoods();
+        model.addAttribute("goodsList", goodsList);
+        return "/index";
+    }
+
 
     @RequestMapping(value = "/goods/public", method = RequestMethod.GET)
     public String publicGoods() {
@@ -34,14 +52,14 @@ public class GoodsController {
                                 @RequestParam(value = "image") String graph,
                                 @RequestParam(value = "detail") String description,
                                 @RequestParam(value = "price") BigDecimal price) {
-
+        //TODO 校验
+        goodsService.addGoods(name, price, summary, description, graph);
         return "/index";
     }
 
     @RequestMapping(value = "/goods/image/upload", method = RequestMethod.POST)
     @ResponseBody
-    public String imageUpload(@RequestParam(value = "file") MultipartFile file,
-                              Model model) {
+    public String imageUpload(@RequestParam(value = "file") MultipartFile file) {
         String fileName = file.getOriginalFilename();
         String filePath = imageSavePath + "/";
         fileName = UUID.randomUUID() + delimiter + fileName;
@@ -56,8 +74,9 @@ public class GoodsController {
             e.printStackTrace();
         }
 
-//        model.addAttribute("image", dest);
-//        return "/goods/public";
+        JSONObject resultPath = new JSONObject();
+        resultPath.put("result", GoodsConst.relativePath + fileName);
+        return resultPath.toJSONString();
     }
 
 }
