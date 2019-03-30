@@ -29,6 +29,17 @@ public interface OrderDao extends JpaRepository<Order, Long>  {
     /*
      * 查询某一状态的订单
      * */
-    @Query(value = "select * from `Order` where state = ?", nativeQuery = true)
-    List<Order> findOrderByState(@Param("state") int state);
+    @Query(value = "select * from `Order` where user_id = :userId and state = :state", nativeQuery = true)
+    List<Order> findOrderByState(@Param("userId") long userId,
+                                 @Param("state") int state);
+
+    /*
+     * 变更某一订单的数量和状态
+     * */
+    @Query(value = "update `Order` set amount = :amount, state = :state where id = :id", nativeQuery = true)
+    @Transactional
+    @Modifying
+    void updateOrderAmountAndState(@Param("id") long id,
+                                          @Param("amount") int amount,
+                                          @Param("state") int state);
 }

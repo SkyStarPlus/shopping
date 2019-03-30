@@ -1,8 +1,10 @@
 package com.netease.zzw.shopping.service;
 
+import com.netease.zzw.shopping.config.OrderConst;
 import com.netease.zzw.shopping.dao.GoodsDao;
 import com.netease.zzw.shopping.dao.OrderDao;
 import com.netease.zzw.shopping.dto.OrderDto;
+import com.netease.zzw.shopping.dto.OrderPayedDto;
 import com.netease.zzw.shopping.model.Goods;
 import com.netease.zzw.shopping.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +28,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> getOrderDtoByState(int state) {
-        List<Order> orderList = orderDao.findOrderByState(state);
+    public List<OrderDto> getOrderDtoByState(long userId, int state) {
+        List<Order> orderList = orderDao.findOrderByState(userId, state);
         List<Long> goodsIdList = new ArrayList<>();
         for(Order order : orderList) {
             goodsIdList.add(order.getGoodsId());
@@ -51,9 +53,44 @@ public class OrderServiceImpl implements OrderService {
                     break;
                 }
             }
-
-
         }
         return orderDtoList;
+    }
+
+    @Override
+    public List<OrderPayedDto> getOrderPayedDto(long userId) {
+        List<Order> orderList = orderDao.findOrderByState(userId, OrderConst.State.PAYED.ordinal());
+        List<Long> goodsIdList = new ArrayList<>();
+        for(Order order : orderList) {
+            goodsIdList.add(order.getGoodsId());
+        }
+        List<Goods> goodsList = goodsDao.getGoodsByIds(goodsIdList);
+
+        List<OrderPayedDto> orderPayedDtoList = new ArrayList<>();
+        for (Order order : orderList) {
+            for (Goods goods : goodsList) {
+                if(goods.getId() == order.getGoodsId()) {
+                    BigDecimal totalPrice = goods.getPrice().multiply(new BigDecimal(order.getAmount()));
+                    OrderPayedDto orderPayedDto = new OrderPayedDto(order.getId(),
+                            order.getUserId(),
+                            order.getGoodsId(),
+                            goods.getName(),
+                            goods.getGraphName(),
+                            goods.getGraphLink(),
+                            order.getBuyTime(),
+                            order.getAmount(),
+                            goods.getPrice(),
+                            totalPrice);
+                    orderPayedDtoList.add(orderPayedDto);
+                    break;
+                }
+            }
+        }
+        return orderPayedDtoList;
+    }
+
+    @Override
+    public void updateOrderAmountAndState(long id, int amount, int state) {
+        orderDao.updateOrderAmountAndState(id, amount, state);
     }
 }
