@@ -48,6 +48,8 @@ $('add').onclick = function(e){
         util.setCookie(name,productList);
     }
     console.log(document.cookie);
+
+
 //		util.deleteCookie(name);
     e == window.event || e;
     layer.reset({
@@ -55,7 +57,14 @@ $('add').onclick = function(e){
         onconfirm:function(){
             layer.hide();
             loading.show();
-            loading.result('添加购物车成功');
+
+            ajax({
+                url:'/api/order/addShoppingCart',
+                data:{goodsId: id, num: num},
+                success:function(json){
+                    loading.result('添加购物车成功');
+                }.bind(this)
+            });
         }.bind(this)
     }).show();
     return;

@@ -37,6 +37,12 @@ public interface GoodsDao extends JpaRepository<Goods, Long>  {
     List<Goods> findAll();
 
     /*
+     * 根据id列表查询商品
+     * */
+    @Query(value = "select * from Goods where id in (:goodsIdList)", nativeQuery = true)
+    List<Goods> getGoodsByIds(@Param("goodsIdList") List<Long> goodsIdList);
+
+    /*
      * 根据商品id查询
      * */
     @Query("select t from Goods t where t.id = :id")
