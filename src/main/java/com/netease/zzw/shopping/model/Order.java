@@ -14,20 +14,9 @@ public class Order implements Serializable {
     private long goodsId;
     private Date buyTime;
     private int amount;
+    private int state; // Order.State
     private Date createTime;
     private Date updateTime;
-
-    public Order() {
-    }
-
-    public Order(long userId, long goodsId, Date buyTime, int amount) {
-        this.userId = userId;
-        this.goodsId = goodsId;
-        this.buyTime = buyTime;
-        this.amount = amount;
-        this.createTime = new Date();
-        this.updateTime = new Date();
-    }
 
     public long getId() {
         return id;
@@ -67,6 +56,14 @@ public class Order implements Serializable {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 
     public Date getCreateTime() {

@@ -14,9 +14,9 @@ public class GoodsServiceImpl implements GoodsService {
     private GoodsDao goodsDao;
 
     @Override
-    public void addGoods(String name, BigDecimal price, String summary, String description,
+    public void addGoods(String name, long publisherId, BigDecimal price, String summary, String description,
                          String graphName, String graphSource, String graphLink) {
-        goodsDao.addGoods(name, price, summary, description, graphName, graphSource, graphLink);
+        goodsDao.addGoods(name, publisherId, price, summary, description, graphName, graphSource, graphLink);
     }
 
     @Override
@@ -27,5 +27,10 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public Goods getGoodsById(long id) {
         return goodsDao.findById(id);
+    }
+
+    @Override
+    public int deleteGoodsById(long id) {
+        return goodsDao.deleteById(id);
     }
 }

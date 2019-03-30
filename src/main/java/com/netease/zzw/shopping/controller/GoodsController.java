@@ -29,7 +29,6 @@ public class GoodsController {
     private String delimiter = "_shoppingProjectImage_";
 
     private String getImageSavePath() {
-
         return new File("images").getAbsolutePath();
     }
 
@@ -61,10 +60,11 @@ public class GoodsController {
                                 @RequestParam(value = "detail") String description,
                                 @RequestParam(value = "price") BigDecimal price) {
         //TODO 校验
-        String graphName = "null";
+        long publisherId = 1;
+
+        String graphName;
         if (fileName == null || fileName.isEmpty()) {
-            String[] filePathAndName = graphLink.split("/");
-            graphName = filePathAndName[filePathAndName.length - 1];
+            graphName = getFileNameAndSuffixFromPath(graphLink);
         } else {
             graphName = fileName;
         }
@@ -73,11 +73,17 @@ public class GoodsController {
         if(price.compareTo(new BigDecimal(0)) < 0) {
             return "/goods/public";
         }
-        goodsService.addGoods(name, price, summary, description, graphName, graphSource, graphLink);
-        return "/index";
+        goodsService.addGoods(name, publisherId, price, summary, description, graphName, graphSource, graphLink);
+        return "redirect:/";
     }
 
-    @RequestMapping(value = "/goods/image/upload", method = RequestMethod.POST)
+    private String getFileNameAndSuffixFromPath(String path) {
+        String[] filePathAndName = path.split("/");
+        String fileNameAndSuffix = filePathAndName[filePathAndName.length - 1];
+        return fileNameAndSuffix;
+    }
+
+    @RequestMapping(value = "/api/goods/image/upload", method = RequestMethod.POST)
     @ResponseBody
     public String imageUpload(@RequestParam(value = "file") MultipartFile file) {
         String fileName = file.getOriginalFilename();
@@ -95,8 +101,32 @@ public class GoodsController {
         }
 
         JSONObject resultPath = new JSONObject();
+        resultPath.put("code", 200);
         resultPath.put("result", GoodsConst.relativePath + fileName);
         return resultPath.toJSONString();
     }
 
+    @RequestMapping(value = "/api/goods/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public String deleteGoods(@RequestParam(value = "id") long id) {
+        JSONObject resultId = new JSONObject();
+        // 判断是否需要删除图片
+        Goods goods = goodsService.getGoodsById(id);
+        if(goods.getGraphSource().equals(GoodsConst.GraphSource.file.name())) {
+            String graphNameAndSuffix = getFileNameAndSuffixFromPath(goods.getGraphLink());
+            String graphPath = imageSavePath + "/" + graphNameAndSuffix;
+            File graphFile = new File(graphPath);
+            // TODO 返回值是boolean，最好做一下判断看是否成功删除
+            graphFile.delete();
+        }
+
+        if(goodsService.deleteGoodsById(id) == 0) {
+            resultId.put("code", 404);
+            resultId.put("id", -1);
+            return resultId.toJSONString();
+        }
+        resultId.put("code", 200);
+        resultId.put("id", id);
+        return resultId.toJSONString();
+    }
 }

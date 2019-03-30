@@ -17,11 +17,12 @@ public interface GoodsDao extends JpaRepository<Goods, Long>  {
     /*
      * 添加商品
      * */
-    @Query(value = "insert into Goods (name, price, summary, description, graph_name, graph_source, graph_link) values (?, ?, ?, ?, ?, ?, ?)",
+    @Query(value = "insert into Goods (name, publisher_id, price, summary, description, graph_name, graph_source, graph_link) values (?, ?, ?, ?, ?, ?, ?, ?)",
             nativeQuery = true)
     @Transactional
     @Modifying
     void addGoods(@Param("name") String name,
+                  @Param("publisherId") long publisherId,
                   @Param("price") BigDecimal price,
                   @Param("summary") String summary,
                   @Param("description") String description,
@@ -40,4 +41,13 @@ public interface GoodsDao extends JpaRepository<Goods, Long>  {
      * */
     @Query("select t from Goods t where t.id = :id")
     Goods findById(@Param("id") long id);
+
+    /*
+     * 删除  必须加入@Modifying和@Transactional
+     * 返回0失败 1成功
+     * */
+    @Modifying
+    @Transactional
+    @Query("delete from Goods t where t.id=:id")
+    int deleteById(@Param("id") long id);
 }

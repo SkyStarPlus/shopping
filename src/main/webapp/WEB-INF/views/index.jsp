@@ -36,7 +36,7 @@
                         <h3>${goods.summary}</h3>
                         <div class="price"><span class="v-unit">¥</span><span class="v-value">${goods.price}</span></div>
                     </a>
-                    <span class="u-btn u-btn-normal u-btn-xs del" data-del="262">删除</span>
+                    <span class="u-btn u-btn-normal u-btn-xs del" data-del="${goods.id}">删除</span>
                 </li>
             </c:forEach>
 

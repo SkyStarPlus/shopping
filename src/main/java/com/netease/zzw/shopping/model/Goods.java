@@ -13,6 +13,7 @@ public class Goods implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
+    private long publisherId;
     private BigDecimal price;
     private String summary;
     private String description;
@@ -36,6 +37,14 @@ public class Goods implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public long getPublisherId() {
+        return publisherId;
+    }
+
+    public void setPublisherId(long publisherId) {
+        this.publisherId = publisherId;
     }
 
     public BigDecimal getPrice() {
