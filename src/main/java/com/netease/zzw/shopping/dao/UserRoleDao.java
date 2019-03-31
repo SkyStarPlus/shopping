@@ -13,6 +13,6 @@ public interface UserRoleDao extends JpaRepository<UserRole, Long> {
     /*
      * 获得用户对应的用户角色关系
      * */
-    @Query(value = "select * from userrole where user_id = :userId", nativeQuery = true)
+    @Query(value = "select * from user_role where user_id = :userId", nativeQuery = true)
     List<UserRole> findByUserId(@Param("userId") long userId);
 }
