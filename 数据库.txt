@@ -1,0 +1,68 @@
+create table if not exists `Role` (
+`id` bigint(20) not null auto_increment,
+`role_name` varchar(255) not null comment '用户名',
+`create_time` datetime not null default current_timestamp comment '创建时间',
+`update_time` datetime not null default current_timestamp on update current_timestamp comment '修改时间',
+PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色表';
+
+create table if not exists `User` (
+`id` bigint(20) not null auto_increment,
+`user_name` varchar(255) not null comment '用户名',
+`password` varchar(255) not null comment '密码',
+`create_time` datetime not null default current_timestamp comment '创建时间',
+`update_time` datetime not null default current_timestamp on update current_timestamp comment '修改时间',
+PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
+
+create table if not exists `user_role` (
+`id` bigint(20) not null auto_increment,
+`user_id` bigint(20) not null comment '用户Id',
+`role_id` bigint(20) not null comment '角色Id',
+`create_time` datetime not null default current_timestamp comment '创建时间',
+`update_time` datetime not null default current_timestamp on update current_timestamp comment '修改时间',
+constraint id_user foreign key (user_id) references user (id),
+constraint id_role foreign key (role_id) references role (id),
+PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色表';
+
+
+create table if not exists `Goods` (
+`id` bigint(20) not null auto_increment,
+`name` varchar(255) not null comment '商品名',
+`publisher_id` bigint(20) not null comment '发布者Id',
+`price` decimal(19,2) not null comment '商品价格',
+`summary` varchar(2500) comment '商品摘要信息',
+`description` text comment '商品详细描述信息',
+`graph_name` varchar(255) comment '图片名',
+`graph_source` varchar(100) comment '图片来源',
+`graph_link` varchar(255) comment '图片存储路径',
+`create_time` datetime not null default current_timestamp comment '创建时间',
+`update_time` datetime not null default current_timestamp on update current_timestamp comment '修改时间',
+constraint id_publisher foreign key (publisher_id) references user (id),
+PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品表';
+
+
+create table if not exists `Order` (
+`id` bigint(20) not null auto_increment,
+`user_id` bigint(20) not null comment '用户Id',
+`goods_id` bigint(20) not null comment '商品Id',
+`buy_time` datetime not null comment '购买时间',
+`amount` int(11) not null comment '购买数量',
+`state` int(5) not null comment '购买状态',
+`create_time` datetime not null default current_timestamp comment '创建时间',
+`update_time` datetime not null default current_timestamp on update current_timestamp comment '修改时间',
+constraint id_user_order foreign key (user_id) references user (id),
+constraint id_goods foreign key (goods_id) references goods (id),
+PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
+
+insert into `role` (role_name) values ('seller'); 
+insert into `role` (role_name) values ('buyer');  
+
+insert into `user` (user_name, password) values ('seller', '981c57a5cfb0f868e064904b8745766f'); 
+insert into `user` (user_name, password) values ('buyer', '37254660e226ea65ce6f1efd54233424'); 
+
+insert into `user_role` (user_id, role_id) values (1, 1);
+insert into `user_role` (user_id, role_id) values (2, 2);
