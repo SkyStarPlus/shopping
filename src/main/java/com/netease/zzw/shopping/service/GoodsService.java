@@ -17,4 +17,8 @@ public interface GoodsService {
     Goods getGoodsById(long id);
 
     int deleteGoodsById(long id);
+
+    int getGoodsUserBuyedAmount(long userId, long goodsId);
+
+    long getAllBuyGoodsAmount(long goodsId);
 }

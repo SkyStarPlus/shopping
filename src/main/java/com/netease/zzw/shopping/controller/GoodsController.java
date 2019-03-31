@@ -2,10 +2,12 @@ package com.netease.zzw.shopping.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.netease.zzw.shopping.config.GoodsConst;
+import com.netease.zzw.shopping.config.UserConst;
 import com.netease.zzw.shopping.dto.GoodsIndexDto;
 import com.netease.zzw.shopping.dto.UserRoleDto;
 import com.netease.zzw.shopping.model.Goods;
 import com.netease.zzw.shopping.service.GoodsService;
+import com.netease.zzw.shopping.service.UserService;
 import com.netease.zzw.shopping.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,8 @@ public class GoodsController {
 
     @Autowired
     private GoodsService goodsService;
+    @Autowired
+    private UserService userService;
 
     private String imageSavePath = getImageSavePath();
     private String delimiter = "_shoppingProjectImage_";
@@ -48,17 +52,42 @@ public class GoodsController {
 
     @RequestMapping(value = "/goods/show", method = RequestMethod.GET)
     public String showGoods(@RequestParam(value = "id") long id, Model model) {
+        boolean isBuyed = true;
+        long amount = 0;
         UserRoleDto userRoleDto = UserUtil.getUserRoleDto();
+        // 登录
+        if(!userRoleDto.getUserName().equals("") && !userRoleDto.getUserName().isEmpty()) {
+            long userId = userService.findUserByUserName(userRoleDto.getUserName()).getId();
+            if(userRoleDto.getUserName().equals(UserConst.RoleName.buyer.name())) {
+                amount = goodsService.getGoodsUserBuyedAmount(userId, id);
+            } else if(userRoleDto.getUserName().equals(UserConst.RoleName.seller.name())) {
+                amount = goodsService.getAllBuyGoodsAmount(id);
+            }
+
+            if(amount < 0) {
+                isBuyed = false;
+                amount = 0;
+            }
+        }
+
 
         Goods goods = goodsService.getGoodsById(id);
         model.addAttribute("goods", goods);
+        model.addAttribute("amount", amount);
+        model.addAttribute("isBuyed", isBuyed);
         model.addAttribute("userRoleDto", userRoleDto);
         return "/goods/show";
     }
 
     @RequestMapping(value = "/goods/public", method = RequestMethod.GET)
-    public String publicGoods() {
-        return "/goods/public";
+    public String publicGoods(Model model) {
+        UserRoleDto userRoleDto = UserUtil.getUserRoleDto();
+        if(!userRoleDto.getUserName().isEmpty()
+                && userRoleDto.getRoleName().equals(UserConst.RoleName.seller.name())) {
+            model.addAttribute("userRoleDto", userRoleDto);
+            return "/goods/public";
+        }
+        return "redirect:/user/login";
     }
 
     @RequestMapping(value = "/goods/publicSubmit", method = RequestMethod.POST)

@@ -145,4 +145,28 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return goodsIndexDtoList;
     }
+
+    @Override
+    public int getGoodsUserBuyedAmount(long userId, long goodsId) {
+        Order order = orderDao.findOrderByUserIdAAndGoodsId(userId, goodsId);
+        if(order != null) {
+            return order.getAmount();
+        }
+        return -1;
+    }
+
+    @Override
+    public long getAllBuyGoodsAmount(long goodsId) {
+        List<Order> orderList = orderDao.findOrdersByGoodsId(goodsId);
+        if(orderList.isEmpty()) {
+            return -1;
+        }
+
+
+        long sum = 0;
+        for(Order order : orderList) {
+            sum += order.getAmount();
+        }
+        return sum;
+    }
 }

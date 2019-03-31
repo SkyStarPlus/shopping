@@ -29,14 +29,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> getOrderDtoByState(long userId, int state) {
+        List<OrderDto> orderDtoList = new ArrayList<>();
         List<Order> orderList = orderDao.findOrdersByState(userId, state);
+        if(orderList.isEmpty()) {
+            return orderDtoList;
+        }
+
         List<Long> goodsIdList = new ArrayList<>();
         for(Order order : orderList) {
             goodsIdList.add(order.getGoodsId());
         }
         List<Goods> goodsList = goodsDao.getGoodsByIds(goodsIdList);
 
-        List<OrderDto> orderDtoList = new ArrayList<>();
         for (Order order : orderList) {
             for (Goods goods : goodsList) {
                 if(goods.getId() == order.getGoodsId()) {
@@ -59,14 +63,19 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderPayedDto> getOrderPayedDto(long userId) {
+        List<OrderPayedDto> orderPayedDtoList = new ArrayList<>();
+
         List<Order> orderList = orderDao.findOrdersByState(userId, OrderConst.State.PAYED.ordinal());
+        if(orderList.isEmpty()) {
+            return orderPayedDtoList;
+        }
+
         List<Long> goodsIdList = new ArrayList<>();
         for(Order order : orderList) {
             goodsIdList.add(order.getGoodsId());
         }
         List<Goods> goodsList = goodsDao.getGoodsByIds(goodsIdList);
 
-        List<OrderPayedDto> orderPayedDtoList = new ArrayList<>();
         for (Order order : orderList) {
             for (Goods goods : goodsList) {
                 if(goods.getId() == order.getGoodsId()) {

@@ -51,6 +51,19 @@ public interface OrderDao extends JpaRepository<Order, Long>  {
     @Query(value = "select * from `order` where goods_id in (:goodsIdList)", nativeQuery = true)
     List<Order> findOrdersByGoodsId(@Param("goodsIdList") List<Long> goodsIdList);
 
+    @Query(value = "select * from `order` where goods_id = :goodsId", nativeQuery = true)
+    List<Order> findOrdersByGoodsId(@Param("goodsId") long goodsId);
+
+    /**
+     * 根据用户Id查询订单
+     * @param userId
+     * @return
+     */
     @Query(value = "select * from `order` where user_id = :userId", nativeQuery = true)
     List<Order> findOrdersByUserId(@Param("userId") long userId);
+
+    @Query(value = "select * from `order` where user_id = :userId and goods_id = :goodsId", nativeQuery = true)
+    Order findOrderByUserIdAAndGoodsId(@Param("userId") long userId,
+                                       @Param("goodsId") long goodsId);
+
 }

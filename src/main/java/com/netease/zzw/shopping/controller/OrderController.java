@@ -2,9 +2,13 @@ package com.netease.zzw.shopping.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.netease.zzw.shopping.config.OrderConst;
+import com.netease.zzw.shopping.config.UserConst;
 import com.netease.zzw.shopping.dto.OrderDto;
 import com.netease.zzw.shopping.dto.OrderPayedDto;
+import com.netease.zzw.shopping.dto.UserRoleDto;
 import com.netease.zzw.shopping.service.OrderService;
+import com.netease.zzw.shopping.service.UserService;
+import com.netease.zzw.shopping.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +25,8 @@ import java.util.List;
 public class OrderController {
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/api/order/addShoppingCart", method = RequestMethod.POST)
     @ResponseBody
@@ -37,11 +43,17 @@ public class OrderController {
 
     @RequestMapping(value = "/order/settleAccount", method = RequestMethod.GET)
     public String settleAccount(Model model) {
-        long userId = 2;
+        UserRoleDto userRoleDto = UserUtil.getUserRoleDto();
+        if(!userRoleDto.getUserName().isEmpty()
+                && userRoleDto.getRoleName().equals(UserConst.RoleName.buyer.name())) {
+            long userId = userService.findUserByUserName(userRoleDto.getUserName()).getId();
+            List<OrderDto> orderDtoList = orderService.getOrderDtoByState(userId, OrderConst.State.SHOPPINGCART.ordinal());
+            model.addAttribute("orderDtoList", orderDtoList);
+            model.addAttribute("userRoleDto", userRoleDto);
+            return "/order/settleAccount";
+        }
 
-        List<OrderDto> orderDtoList = orderService.getOrderDtoByState(userId, OrderConst.State.SHOPPINGCART.ordinal());
-        model.addAttribute("orderDtoList", orderDtoList);
-        return "/order/settleAccount";
+        return "redirect:/user/login";
     }
 
     @RequestMapping(value = "/api/order/payOrder", method = RequestMethod.POST)
@@ -66,15 +78,20 @@ public class OrderController {
 
     @RequestMapping(value = "/order/account", method = RequestMethod.GET)
     public String accountOrder(Model model) {
-        long userId = 2;
-
-        List<OrderPayedDto> orderPayedDtoList = orderService.getOrderPayedDto(userId);
-        BigDecimal totalGoodsPrice = new BigDecimal(0);
-        for (OrderPayedDto orderPayedDto : orderPayedDtoList) {
-            totalGoodsPrice = totalGoodsPrice.add(orderPayedDto.getTotalPrice());
+        UserRoleDto userRoleDto = UserUtil.getUserRoleDto();
+        if(!userRoleDto.getUserName().isEmpty()
+                && userRoleDto.getRoleName().equals(UserConst.RoleName.buyer.name())) {
+            long userId = userService.findUserByUserName(userRoleDto.getUserName()).getId();
+            List<OrderPayedDto> orderPayedDtoList = orderService.getOrderPayedDto(userId);
+            BigDecimal totalGoodsPrice = new BigDecimal(0);
+            for (OrderPayedDto orderPayedDto : orderPayedDtoList) {
+                totalGoodsPrice = totalGoodsPrice.add(orderPayedDto.getTotalPrice());
+            }
+            model.addAttribute("orderPayedDtoList", orderPayedDtoList);
+            model.addAttribute("totalGoodsPrice", totalGoodsPrice);
+            model.addAttribute("userRoleDto", userRoleDto);
+            return "/order/account";
         }
-        model.addAttribute("orderPayedDtoList", orderPayedDtoList);
-        model.addAttribute("totalGoodsPrice", totalGoodsPrice);
-        return "/order/account";
+        return "redirect:/user/login";
     }
 }

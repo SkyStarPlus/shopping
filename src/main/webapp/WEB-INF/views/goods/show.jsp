@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <html>
 <head>
@@ -48,11 +51,13 @@
             <div class="price">
                 <span class="v-unit">¥</span><span class="v-value">${goods.price}</span>
             </div>
-            <div class="num">购买数量：<span id="plusNum" class="lessNum"><a>-</a></span><span class="totalNum" id="allNum">0</span><span id="addNum" class="moreNum"><a>+</a></span></div>
-            <div class="oprt f-cb">
-                <button class="u-btn u-btn-primary" id="add" data-id="${goods.id}" data-title="${goods.name}" data-price="${goods.price}">
-                    加入购物车</button>
-            </div>
+            <div class="num">购买数量：<span id="plusNum" class="lessNum"><a>-</a></span><span class="totalNum" id="allNum">${amount}</span><span id="addNum" class="moreNum"><a>+</a></span></div>
+
+            <c:if test='${userRoleDto.roleName=="buyer" && isBuyed==false}'>
+                <div class="oprt f-cb">
+                    <button class="u-btn u-btn-primary" id="add" data-id="${goods.id}" data-title="${goods.name}" data-price="${goods.price}">加入购物车</button>
+                </div>
+            </c:if>
         </div>
     </div>
     <div class="m-tab m-tab-fw m-tab-simple f-cb">
