@@ -35,6 +35,11 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
+    public void updateGoodsById(long id, String name, long publisherId, BigDecimal price, String summary, String description, String graphName, String graphSource, String graphLink) {
+        goodsDao.updateGoodsById(id, name, publisherId, price, summary, description, graphName, graphSource, graphLink);
+    }
+
+    @Override
     public List<Goods> getAllGoods() {
         return goodsDao.findAll();
     }

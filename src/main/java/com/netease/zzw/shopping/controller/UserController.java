@@ -20,7 +20,6 @@ public class UserController {
 
     @RequestMapping(value = "/user/login", method = RequestMethod.GET)
     public String login() {
-        // TODO 判断是否登录，是则跳转到主页面，否则登录
         return "/user/login";
     }
 

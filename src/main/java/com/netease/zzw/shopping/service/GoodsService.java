@@ -10,6 +10,9 @@ public interface GoodsService {
     void addGoods(String name, long publisherId, BigDecimal price, String summary, String description,
                   String graphName, String graphSource, String graphLink);
 
+    void updateGoodsById(long id, String name, long publisherId, BigDecimal price, String summary, String description,
+                  String graphName, String graphSource, String graphLink);
+
     List<Goods> getAllGoods();
 
     List<GoodsIndexDto> getGoodsIndexShowDto(String userName, String roleName, int type);

@@ -31,6 +31,23 @@ public interface GoodsDao extends JpaRepository<Goods, Long>  {
                   @Param("graphLink") String graphLink);
 
     /*
+     * 修改商品
+     * */
+    @Query(value = "update `Goods` set name = :name, publisher_id = :publisherId, price = :price, summary = :summary, description = :description, graph_name = :graphName, graph_source = :graphSource, graph_link = :graphLink where id = :id",
+            nativeQuery = true)
+    @Transactional
+    @Modifying
+    void updateGoodsById(@Param("id") long id,
+                         @Param("name") String name,
+                         @Param("publisherId") long publisherId,
+                         @Param("price") BigDecimal price,
+                         @Param("summary") String summary,
+                         @Param("description") String description,
+                         @Param("graphName") String graphName,
+                         @Param("graphSource") String graphSource,
+                         @Param("graphLink") String graphLink);
+
+    /*
      * 查询全部商品
      * */
     @Query("select t from Goods t")

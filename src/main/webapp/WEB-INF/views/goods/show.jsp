@@ -58,6 +58,12 @@
                     <button class="u-btn u-btn-primary" id="add" data-id="${goods.id}" data-title="${goods.name}" data-price="${goods.price}">加入购物车</button>
                 </div>
             </c:if>
+
+            <c:if test='${userRoleDto.roleName=="seller" && isBuyed==false}'>
+                <div class="oprt f-cb">
+                    <a href="/goods/edit?id=${goods.id}" class="u-btn u-btn-primary">编 辑</a>
+                </div>
+            </c:if>
         </div>
     </div>
     <div class="m-tab m-tab-fw m-tab-simple f-cb">

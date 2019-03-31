@@ -32,12 +32,17 @@ public class OrderController {
     @ResponseBody
     public String addShoppingCart(@RequestParam(value = "goodsId") long goodsId,
                                   @RequestParam(value = "num") int amount) {
-        long userId = 2;
-        // TODO 做校验
-        orderService.addOrder(userId, goodsId, new Date(), amount, OrderConst.State.SHOPPINGCART.ordinal());
-
         JSONObject resultPath = new JSONObject();
-        resultPath.put("code", 200);
+
+        UserRoleDto userRoleDto = UserUtil.getUserRoleDto();
+        if(!userRoleDto.getUserName().isEmpty()
+                && userRoleDto.getRoleName().equals(UserConst.RoleName.buyer.name())) {
+            long userId = userService.findUserByUserName(userRoleDto.getUserName()).getId();
+            orderService.addOrder(userId, goodsId, new Date(), amount, OrderConst.State.SHOPPINGCART.ordinal());
+            resultPath.put("code", 200);
+            return resultPath.toJSONString();
+        }
+        resultPath.put("code", 400);
         return resultPath.toJSONString();
     }
 
@@ -60,9 +65,16 @@ public class OrderController {
     @ResponseBody
     public String payOrder(@RequestParam(value = "id") long id,
                            @RequestParam(value = "amount") int amount) {
-        orderService.updateOrderAmountAndState(id, amount, OrderConst.State.PAYED.ordinal());
         JSONObject resultPath = new JSONObject();
-        resultPath.put("code", 200);
+
+        UserRoleDto userRoleDto = UserUtil.getUserRoleDto();
+        if(!userRoleDto.getUserName().isEmpty()
+                && userRoleDto.getRoleName().equals(UserConst.RoleName.buyer.name())) {
+            orderService.updateOrderAmountAndState(id, amount, OrderConst.State.PAYED.ordinal());
+            resultPath.put("code", 200);
+            return resultPath.toJSONString();
+        }
+        resultPath.put("code", 400);
         return resultPath.toJSONString();
     }
 
@@ -70,9 +82,17 @@ public class OrderController {
     @ResponseBody
     public String cancleOrder(@RequestParam(value = "id") long id,
                            @RequestParam(value = "amount") int amount) {
-        orderService.updateOrderAmountAndState(id, amount, OrderConst.State.CANCLED.ordinal());
         JSONObject resultPath = new JSONObject();
-        resultPath.put("code", 200);
+
+        UserRoleDto userRoleDto = UserUtil.getUserRoleDto();
+        if(!userRoleDto.getUserName().isEmpty()
+                && userRoleDto.getRoleName().equals(UserConst.RoleName.buyer.name())) {
+            orderService.updateOrderAmountAndState(id, amount, OrderConst.State.CANCLED.ordinal());
+
+            resultPath.put("code", 200);
+            return resultPath.toJSONString();
+        }
+        resultPath.put("code", 400);
         return resultPath.toJSONString();
     }
 
