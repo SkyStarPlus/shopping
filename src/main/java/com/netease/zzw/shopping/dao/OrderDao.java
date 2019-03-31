@@ -30,8 +30,8 @@ public interface OrderDao extends JpaRepository<Order, Long>  {
      * 查询某一状态的订单
      * */
     @Query(value = "select * from `Order` where user_id = :userId and state = :state", nativeQuery = true)
-    List<Order> findOrderByState(@Param("userId") long userId,
-                                 @Param("state") int state);
+    List<Order> findOrdersByState(@Param("userId") long userId,
+                                  @Param("state") int state);
 
     /*
      * 变更某一订单的数量和状态
@@ -42,4 +42,15 @@ public interface OrderDao extends JpaRepository<Order, Long>  {
     void updateOrderAmountAndState(@Param("id") long id,
                                           @Param("amount") int amount,
                                           @Param("state") int state);
+
+    /**
+     * 根据商品id列表查询订单
+     * @param goodsIdList
+     * @return
+     */
+    @Query(value = "select * from `order` where goods_id in (:goodsIdList)", nativeQuery = true)
+    List<Order> findOrdersByGoodsId(@Param("goodsIdList") List<Long> goodsIdList);
+
+    @Query(value = "select * from `order` where user_id = :userId", nativeQuery = true)
+    List<Order> findOrdersByUserId(@Param("userId") long userId);
 }

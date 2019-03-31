@@ -1,5 +1,6 @@
 package com.netease.zzw.shopping.service;
 
+import com.netease.zzw.shopping.dto.GoodsIndexDto;
 import com.netease.zzw.shopping.model.Goods;
 
 import java.math.BigDecimal;
@@ -10,6 +11,8 @@ public interface GoodsService {
                   String graphName, String graphSource, String graphLink);
 
     List<Goods> getAllGoods();
+
+    List<GoodsIndexDto> getGoodsIndexShowDto(String userName, String roleName, int type);
 
     Goods getGoodsById(long id);
 

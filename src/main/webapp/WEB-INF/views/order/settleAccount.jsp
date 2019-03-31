@@ -74,7 +74,6 @@
 <div class="n-foot">
     <p>前端页面参考自原Demo项目</p>
 </div>
-
 <script type="text/javascript" src="../../../resources/js/global.js"></script>
 <script type="text/javascript" src="../../../resources/js/settleAccount.js"></script>
 </body>

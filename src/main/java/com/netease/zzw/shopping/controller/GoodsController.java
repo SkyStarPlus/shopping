@@ -2,8 +2,11 @@ package com.netease.zzw.shopping.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.netease.zzw.shopping.config.GoodsConst;
+import com.netease.zzw.shopping.dto.GoodsIndexDto;
+import com.netease.zzw.shopping.dto.UserRoleDto;
 import com.netease.zzw.shopping.model.Goods;
 import com.netease.zzw.shopping.service.GoodsService;
+import com.netease.zzw.shopping.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,16 +36,23 @@ public class GoodsController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String displayIndexGoods(Model model) {
-        List<Goods> goodsList = goodsService.getAllGoods();
-        model.addAttribute("goodsList", goodsList);
+    public String displayIndexGoods(@RequestParam(value = "type", required = false, defaultValue = "0") int type,
+                                    Model model) {
+        UserRoleDto userRoleDto = UserUtil.getUserRoleDto();
+
+        List<GoodsIndexDto> goodsIndexDtoList = goodsService.getGoodsIndexShowDto(userRoleDto.getUserName(), userRoleDto.getRoleName(), type);
+        model.addAttribute("goodsList", goodsIndexDtoList);
+        model.addAttribute("userRoleDto", userRoleDto);
         return "/index";
     }
 
     @RequestMapping(value = "/goods/show", method = RequestMethod.GET)
     public String showGoods(@RequestParam(value = "id") long id, Model model) {
+        UserRoleDto userRoleDto = UserUtil.getUserRoleDto();
+
         Goods goods = goodsService.getGoodsById(id);
         model.addAttribute("goods", goods);
+        model.addAttribute("userRoleDto", userRoleDto);
         return "/goods/show";
     }
 

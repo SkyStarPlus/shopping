@@ -29,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> getOrderDtoByState(long userId, int state) {
-        List<Order> orderList = orderDao.findOrderByState(userId, state);
+        List<Order> orderList = orderDao.findOrdersByState(userId, state);
         List<Long> goodsIdList = new ArrayList<>();
         for(Order order : orderList) {
             goodsIdList.add(order.getGoodsId());
@@ -59,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderPayedDto> getOrderPayedDto(long userId) {
-        List<Order> orderList = orderDao.findOrderByState(userId, OrderConst.State.PAYED.ordinal());
+        List<Order> orderList = orderDao.findOrdersByState(userId, OrderConst.State.PAYED.ordinal());
         List<Long> goodsIdList = new ArrayList<>();
         for(Order order : orderList) {
             goodsIdList.add(order.getGoodsId());

@@ -4,16 +4,14 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-//表示此类为一个实体类
 @Entity
-//不使用table默认为实体类名字
-@Table(name = "User")
-public class User implements Serializable {
+@Table(name = "UserRole")
+public class UserRole implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String userName;
-    private String password;
+    private long userId;
+    private long roleId;
     private Date createTime;
     private Date updateTime;
 
@@ -25,20 +23,20 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
-    public String getPassword() {
-        return password;
+    public long getRoleId() {
+        return roleId;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setRoleId(long roleId) {
+        this.roleId = roleId;
     }
 
     public Date getCreateTime() {

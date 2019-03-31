@@ -8,13 +8,33 @@
 </head>
 
 <body>
-<div class="n-support">请使用Chrome、Safari等webkit内核的浏览器！</div><div class="n-head">
+<div class="n-support">请使用Chrome、Safari等webkit内核的浏览器！</div>
+
+<div class="n-head">
     <div class="g-doc f-cb">
         <div class="user">
-            请<a href="/login">[登录]</a>
+            <c:if test='${userRoleDto.roleName==""}'>
+                请<a href="/user/login">[登录]</a>
+            </c:if>
+
+            <c:if test='${userRoleDto.roleName!=""}'>
+                ${userRoleDto.displayRoleName}你好，<span class="name">${userRoleDto.userName}</span>！<a href="/user/logout">[退出]</a>
+            </c:if>
         </div>
+
+
         <ul class="nav">
             <li><a href="/">首页</a></li>
+            <c:if test='${userRoleDto.roleName=="seller"}'>
+                <li><a href="/goods/public">发布</a></li>
+            </c:if>
+
+            <c:if test='${userRoleDto.roleName=="buyer"}'>
+                <li><a href="/order/account">账务</a></li>
+            </c:if>
+            <c:if test='${userRoleDto.roleName=="buyer"}'>
+                <li><a href="/order/settleAccount">购物车</a></li>
+            </c:if>
         </ul>
     </div>
 </div>
