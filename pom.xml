@@ -77,10 +77,18 @@
         </dependency>
 
 
+        <!--    shiro是用来做用户登录及权限控制的    -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
             <version>1.4.0</version>
+        </dependency>
+
+        <!--    jasypt是用来进行密码加密的，防止上传到GitHub上密码泄露    -->
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>1.14</version>
         </dependency>
     </dependencies>
 

@@ -4,6 +4,11 @@ server:
   tomcat:
     uri-encoding: utf-8
 
+# 数据库加密配置
+jasypt:
+  encryptor:
+    password: zzwMySqlPassword
+
 spring:
   mvc:
     view:
@@ -14,7 +19,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/shopping?characterEncoding=UTF-8
     username: ipms
-    password: 12345678
+    password: ENC(m8+SruNLI9JLodtvIG4nUaCK2AzVh1O8) # 启动类配置注解@EnableEncryptableProperties 以启动该功能
   #Spring Data JPA
   jpa:
     database: MYSQL
